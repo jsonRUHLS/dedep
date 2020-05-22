@@ -21,6 +21,7 @@ Deno.test('get deps', () => {
   export * from 'https://deno.land/std@v0.1.1/http'
   export * from 'https://deno.land/std@v0.1.1/http/server.ts'
   export * as abc from 'https://deno.land/x/abc/mod.ts'
+  export * from 'https://dev.jspm.io/react'
   `)
   assertEquals(deps, [
     {
@@ -36,6 +37,13 @@ Deno.test('get deps', () => {
       name: 'cacjs/cac',
       version: 'v0.1.1',
       emptyVersion: false,
+    },
+    {
+      type: 'npm',
+      url: 'https://dev.jspm.io/react',
+      name: 'react',
+      version: '16.13.1',
+      emptyVersion: true,
     },
     {
       type: 'npm',

@@ -1,6 +1,6 @@
 export function getDeps(text: string) {
   const deps: Array<{
-    type: 'npm' | 'github' | 'std' | 'unknown'
+    type: 'npm' | 'github' | 'react' | 'std' | 'unknown'
     url: string
     name: string
     version: string
@@ -60,11 +60,22 @@ export function getDeps(text: string) {
             emptyVersion: !version,
           })
         }
+      } else if (hostname === 'dev.jspm.io') {
+        if ((m = /^\/react(?:@([^\/]+))?/.exec(pathname))) {
+          deps.push({
+            type: 'react',
+            url: p1,
+            name: 'jspm/react',
+            version: m[1] || 'master',
+            emptyVersion: !m[1],
+          })
+        }
       } else {
         handlerUnkown(p1)
       }
+
+      return ''
     }
-    return ''
   })
 
   function handlerUnkown(url: string) {
@@ -79,7 +90,6 @@ export function getDeps(text: string) {
 
   return deps
 }
-
 
 export async function getPkgLatestVersion(name: string) {
   const json = await fetch(`https://registry.npmjs.org/${name}`).then((res) =>
